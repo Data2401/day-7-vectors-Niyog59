@@ -44,7 +44,10 @@ knitr::opts_chunk$set(echo = TRUE)
 1. Write a function to simulate rolling a 6-sided die and returns the result.
 
 ```{r}
-
+roll_die <- function() {
+  sample(1:6, 1)
+}
+roll_die()
 ```
 
 
@@ -52,30 +55,103 @@ knitr::opts_chunk$set(echo = TRUE)
 1. Write a function to simulate rolling 2 6-sided dice that returns the sum of the rolls. 
 
 ```{r}
-
-
+roll_two_dice <- function() {
+  dice <- floor(runif(2, 1, 7))
+  sum(dice)
+}
+roll_two_dice()
 ```
 
 
 1. Write a function that takes two people name's as strings, simulates rolling a 6-sided die for each of the names, then returns the name of the person with the higher roll. The function should reroll once on a tie, but if there is a second tie, it should return "draw". 
 
 ```{r}
-# Your one-roll function goes here
-
+dice_game <- function(name1, name2) {
+  roll_die <- function() 
+    floor(runif(1, 1, 7))
+  roll1 <- roll_die()
+  roll2 <- roll_die()
+  if (roll1 > roll2) {
+    return(name1)
+  } else if (roll2 > roll1) {
+    return(name2)
+  } else {
+    roll1 <- roll_die()
+    roll2 <- roll_die()
+    if (roll1 > roll2) {
+      return(name1)
+    } else if (roll2 > roll1) {
+      return(name2)
+    } else {
+      return("draw")
+    }
+  }
+}
+dice_game("rick","morty")
 ```
 
 
 2. Write a second function (you may start by modifying the first one) that takes two names as strings, simulates both of them rolling die 15 times, and returns the name of the person who "won" more rolls. Don't reroll ties this time, but don't count them as "wins". 
 
 ```{r}
-
-
+dice_match <- function(name1, name2) {
+  roll_die <- function() 
+    floor(runif(1, 1, 7)) 
+   wins1 <- 0
+   wins2 <- 0
+  for (i in 1:15) {
+    roll1 <- roll_die()
+    roll2 <- roll_die()
+    
+    if (roll1 > roll2) {
+      wins1 <- wins1 + 1
+    } else {
+      wins2 <- wins2 + 1
+    }
+  }
+  
+  if (wins1 > wins2) {
+    return(name1)
+  } else if (wins2 > wins1) {
+    return(name2)
+  } else {
+    return("draw")
+  }
+}
+dice_match("Rick","Morty")
 ```
 
 
 3. Modify your function from (2) so that the person in the first argument has a die that is weighted to get higher numbers more often (you may decide the actual percentage change). Run the function ten or so times. Does the second person ever win?
 
 ```{r}
-# Your "cheating" function goes here
+dice_match_weighted <- function(name1, name2) {
+  roll_fair <- function() 
+    sample(1:6, 1)
+  roll_weighted <- function() {
+    sample(1:6, 1, prob = c(0.05, 0.1, 0.15, 0.2, 0.25, 0.25))
+  }
+  wins1 <- 0
+  wins2 <- 0
+   for (i in 1:15) {
+    roll1 <- roll_weighted() 
+    roll2 <- roll_fair()     
+    
+    if (roll1 > roll2) {
+      wins1 <- wins1 + 1
+    } else if (roll2 > roll1) {
+      wins2 <- wins2 + 1
+    }
+  }
+  
+  if (wins1 > wins2) {
+    return(name1)
+  } else if (wins2 > wins1) {
+    return(name2)
+  } else {
+    return("draw")
+  }
+}
+dice_match_weighted("C","Q")
 ```
 
